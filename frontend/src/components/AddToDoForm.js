@@ -1,31 +1,29 @@
-import React, {useEffect, useState} from "react";
-import axios from "axios";
+import addItem from "../service/AddItem";
+import React from "react";
 
-export default function AddToDoForm() {
-    const [description, setDescription] = useState("");
-    const [status, setStatus] = useState("OPEN");
+export default function AddToDoForm(props) {
+    const {setStatus, setDescription, description, status}= props
 
     return <form>
-        <label>Add new description
-        <input value={description} onChange={event => setDescription(event.target.value)}/>
+        <label>description
+            <input placeholder="add your to do"
+                   value = {description}
+                   onChange={event => setDescription(event.target.value)}/>
         </label>
-        <label>Add new status
+        <label>status
             <select onChange={event => setStatus(event.target.value)}>
                 <option value="OPEN">OPEN</option>
                 <option value="IN_PROGRESS">IN PROGRESS</option>
-                <option value="DONE">DONE</option></select>
+                <option value="DONE">DONE</option>
+            </select>
         </label>
 
         <button disabled={description.length === 0} type="button" onClick={() => {
-            sendRequest({description, status})
+            addItem({description, status})
             setDescription("");
-            setStatus("");
-        }}>Enter</button>
+            setStatus("OPEN");
+        }}>Add
+        </button>
     </form>
-}
 
-function sendRequest({description, status}){
-    const url = "/api/todo"
-    const newToDo = {description, status}
-    axios.post(url, newToDo).catch(error => console.log(error));
 }

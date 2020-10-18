@@ -1,11 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import AddToDoForm from "./components/AddToDoForm";
-import deleteItem from "./service/DeleteItem";
-import changeStatusOfItem from "./service/changeStatusOfItem";
+import ToDoList from "./components/ToDoList";
+
+
 
 function App() {
   const url = "/api/todo";
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("OPEN");
   const [toDoList, setToDoList] = useState([]);
   const [deletedItem, setDeletedItem] = useState(false);
 
@@ -16,19 +19,21 @@ function App() {
           .catch(error => console.log(error));
   }, [toDoList, deletedItem]);
 
+
     return (
     <div>
-        {toDoList.map(item =>
-            <div key = {item.id}>
-                {item.description} {item.status}
-                {/*<button onClick={() => {changeStatusOfItem({item})}}>Change status</button>*/}
-                 <button onClick={() => {deleteItem(item.id); setDeletedItem(!deletedItem)}}>Delete</button>
-            </div>)}
+        <ToDoList
+        deletedItem={deletedItem} setDeletedItem={setDeletedItem} toDoList={toDoList} status={status} setStatus={setStatus}
+        />
         <div>
-          <AddToDoForm/>
+          <AddToDoForm
+          setStatus={setStatus} setDescription={setDescription} description={description} status={status}
+          />
         </div>
     </div>
   );
 }
 
 export default App;
+
+
